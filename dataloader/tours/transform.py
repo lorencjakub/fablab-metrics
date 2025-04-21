@@ -39,7 +39,7 @@ def calculate_tours_members_ratios_and_counts(date_window):
                 SELECT
                     COUNT(*) AS visitors,
                     COUNT(CASE WHEN is_member = FALSE THEN 1 END) AS non_members,
-	                COUNT(CASE WHEN is_member = TRUE THEN 1 END) AS members
+                    COUNT(CASE WHEN is_member = TRUE THEN 1 END) AS members
                 FROM 
                     tours_reservations
                 WHERE 
@@ -88,7 +88,6 @@ def calculate_tours_members_ratios_and_counts(date_window):
                 "purchased_memberships": len(purchased_membership)
             }
 
-    pass
 
 def get_memberships_in_three_months(date_window):
     for date_start, date_end in date_window():
