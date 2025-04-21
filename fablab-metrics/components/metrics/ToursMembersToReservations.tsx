@@ -33,6 +33,7 @@ export function ToursMembersToReservations() {
     [DATA.non_members]: d.non_members,
     [DATA.purchased_memberships]: d.purchased_memberships
   }));
+  consol.debug(data);
 
   return (
     <div className="w-full h-96">
