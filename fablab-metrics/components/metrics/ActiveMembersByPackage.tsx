@@ -18,17 +18,17 @@ export function ActiveMembersByPackage() {
   const metrics = useMetrics("active_members_by_package");
   const packages = usePackages();
 
-  PACKAGES = packages.data?.filter((item: { id: number, name: string }) => PACKAGES_IDS.includes(item.id)).map((t: { id: number, name: string }) => {
-      if (t.name.startsWith("Tovaryš")) return "Tovaryš"
-
-      return t.name
-  });
-
   const chartCommonProps = useChartCommonProps({
     leftAxisLegend: "Počet členů",
   });
 
   if (metrics.isLoading || packages.isLoading) return null;
+
+  PACKAGES = packages.data?.filter((item: { id: number, name: string }) => PACKAGES_IDS.includes(item.id)).map((t: { id: number, name: string }) => {
+    if (t.name.startsWith("Tovaryš")) return "Tovaryš"
+
+    return t.name
+  });
 
   const data = metrics.data.map((m: any) => ({ ...m, Ostatní: sumOthers(m) }));
 

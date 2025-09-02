@@ -13,6 +13,8 @@ export function PackageChangesByMonth() {
 
   if (metrics.isLoading) return null;
 
+  console.debug(metrics.data);
+
   return (
     <div className="w-full h-96">
       {/* @ts-expect-error */}
