@@ -62,73 +62,73 @@ def write_dataset(name, granularity_label, dataset):
 
 
 if __name__ == "__main__":
-    # db_empty = not os.path.exists(settings.db_path)
-    #
-    # if db_empty:
-    #     print("Fetching all historical resource logs")
-    #     date_start = min(date_start_fabman, date_start_reenio)
-    #     last_date = datetime.today().replace(day=1) + relativedelta(months=1)
-    #
-    #     while date_start < last_date:
-    #         date_end = date_start + relativedelta(months=1)
-    #
-    #         extract_resource_logs(date_start=date_start, date_end=date_end)
-    #         extract_tours_reservations_logs(date_start=date_start, date_end=date_end, lang="cs")
-    #
-    #         date_start = date_end
-    #
-    # else:
-    #     # Fetch data from last month. Script is supposed to run monthly which gives
-    #     # enough overlap.
-    #     date_end = datetime.today().replace(day=1)
-    #     date_start = date_end + relativedelta(months=-1)
-    #
-    #     extract_resource_logs(date_start=date_start, date_end=date_end)
-    #     extract_tours_reservations_logs(date_start=date_start, date_end=date_end, lang="cs")
-    #
-    # extract_resources()
-    # extract_training_courses()
-    # member_packages_status = extract_member_packages()
-    # extract_member_trainings()
-    # extract_members_emails()
-    #
-    # write_training_courses()
-    # write_resources()
-    # write_tours_reservations()
-    #
-    # with open(os.path.join(settings.data_path, "status.json"), "w") as jsonfile:
-    #     json.dump(
-    #         {
-    #             "date": datetime.now(timezone.utc).isoformat(),
-    #             **member_packages_status,
-    #         },
-    #         jsonfile,
-    #         ensure_ascii=False,
-    #     )
-    #
-    # datasets = {
-    #     # Members & packages
-    #     "active_members_by_package": calculate_active_members_by_package,
-    #     "total_members_by_package": calculate_total_members_by_package,
-    #     "package_changes_by_month": calculate_package_changes_by_month,
-    #     # Resources
-    #     "resources_usage": calculate_resource_usage,
-    #     "member_visits": calculate_member_visits,
-    #     # Trainings
-    #     "trainings_by_date": calculate_trainings_by_date,
-    #     "trainings_by_member": calculate_trainings_by_member,
-    #     # Tours
-    #     "tours_members_to_reservations": calculate_tours_members_ratios_and_counts
-    # }
-    #
-    # granularity = {
-    #     "1m": monthly,
-    #     "1y": yearly,
-    # }
-    #
-    # for granularity_label, data_window in granularity.items():
-    #     for metric, fn in datasets.items():
-    #         print(f"Processing {metric} - {granularity_label}")
-    #         write_dataset(metric, granularity_label, fn(data_window))
+    db_empty = not os.path.exists(settings.db_path)
+
+    if db_empty:
+        print("Fetching all historical resource logs")
+        date_start = min(date_start_fabman, date_start_reenio)
+        last_date = datetime.today().replace(day=1) + relativedelta(months=1)
+
+        while date_start < last_date:
+            date_end = date_start + relativedelta(months=1)
+
+            extract_resource_logs(date_start=date_start, date_end=date_end)
+            extract_tours_reservations_logs(date_start=date_start, date_end=date_end, lang="cs")
+
+            date_start = date_end
+
+    else:
+        # Fetch data from last month. Script is supposed to run monthly which gives
+        # enough overlap.
+        date_end = datetime.today().replace(day=1)
+        date_start = date_end + relativedelta(months=-1)
+
+        extract_resource_logs(date_start=date_start, date_end=date_end)
+        extract_tours_reservations_logs(date_start=date_start, date_end=date_end, lang="cs")
+
+    extract_resources()
+    extract_training_courses()
+    member_packages_status = extract_member_packages()
+    extract_member_trainings()
+    extract_members_emails()
+
+    write_training_courses()
+    write_resources()
+    write_tours_reservations()
+
+    with open(os.path.join(settings.data_path, "status.json"), "w") as jsonfile:
+        json.dump(
+            {
+                "date": datetime.now(timezone.utc).isoformat(),
+                **member_packages_status,
+            },
+            jsonfile,
+            ensure_ascii=False,
+        )
+
+    datasets = {
+        # Members & packages
+        "active_members_by_package": calculate_active_members_by_package,
+        "total_members_by_package": calculate_total_members_by_package,
+        "package_changes_by_month": calculate_package_changes_by_month,
+        # Resources
+        "resources_usage": calculate_resource_usage,
+        "member_visits": calculate_member_visits,
+        # Trainings
+        "trainings_by_date": calculate_trainings_by_date,
+        "trainings_by_member": calculate_trainings_by_member,
+        # Tours
+        "tours_members_to_reservations": calculate_tours_members_ratios_and_counts
+    }
+
+    granularity = {
+        "1m": monthly,
+        "1y": yearly,
+    }
+
+    for granularity_label, data_window in granularity.items():
+        for metric, fn in datasets.items():
+            print(f"Processing {metric} - {granularity_label}")
+            write_dataset(metric, granularity_label, fn(data_window))
 
     write_packages()
