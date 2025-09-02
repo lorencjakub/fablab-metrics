@@ -47,6 +47,8 @@ def extract_member_packages():
                     (member_id, package["name"], package["date_start"], package["date_end"], package["package_id"]),
                 )
 
+        db.execute("DELETE FROM packages WHERE id > 0")
+
         db.execute("""
             INSERT INTO packages (id, name)
             SELECT package_id AS id, package AS name
