@@ -9,7 +9,7 @@ import { usePackages } from "fablab-metrics/components/usePackages";
 import { useChartCommonProps } from "fablab-metrics/ui/useChartCommonProps";
 import { useDateRange } from "fablab-metrics/ui/useDateRange";
 import { sum } from "ramda";
-import { PACKAGES_IDS } from "fablab-metrics/env";
+import { NEXT_PUBLIC_PACKAGES_IDS as PACKAGES_IDS } from "fablab-metrics/env";
 
 var PACKAGES: string[] = [];
 
@@ -18,10 +18,12 @@ export function ActiveMembersByPackage() {
   const metrics = useMetrics("active_members_by_package");
   const packages = usePackages();
 
-  PACKAGES = packages.data?.filter((item: { id: number, name: string }) => PACKAGES_IDS.includes(item.id)).map((t: { id: number, name: string }) => t.name);
-  console.debug(PACKAGES_IDS);
-  console.debug(PACKAGES);
-  console.debug(packages.data);
+  PACKAGES = packages.data?.filter((item: { id: number, name: string }) => PACKAGES_IDS.includes(item.id)).map((t: { id: number, name: string }) => {
+      if (t.name.startsWith("Tovaryš")) return "Tovaryš"
+
+      return t.name
+  });
+
   const chartCommonProps = useChartCommonProps({
     leftAxisLegend: "Počet členů",
   });
@@ -29,7 +31,6 @@ export function ActiveMembersByPackage() {
   if (metrics.isLoading || packages.isLoading) return null;
 
   const data = metrics.data.map((m: any) => ({ ...m, Ostatní: sumOthers(m) }));
-  console.debug(data);
 
   return (
     <div className="w-full h-96">
@@ -50,8 +51,6 @@ export function ActiveMembersByPackage() {
     </div>
   );
 }
-
-// const PACKAGES = ["Učedník", "Tovaryš", "Mistr", "Hobbylab crew"];
 
 function sumOthers(metric: any) {
   return sum(

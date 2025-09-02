@@ -29,4 +29,4 @@ def write_packages():
         os.makedirs(path.dirname(filename), exist_ok=True)
 
         with open(filename, "w") as jsonfile:
-            json.dump(list(packages), jsonfile, ensure_ascii=False)
+            json.dump(list(packages), jsonfile, ensure_ascii=True)
