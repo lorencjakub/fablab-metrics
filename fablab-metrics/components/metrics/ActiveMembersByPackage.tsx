@@ -19,7 +19,9 @@ export function ActiveMembersByPackage() {
   const packages = usePackages();
 
   PACKAGES = packages.data?.filter((item: { id: number, name: string }) => PACKAGES_IDS.includes(item.id)).map((t: { id: number, name: string }) => t.name);
+  console.debug(PACKAGES_IDS);
   console.debug(PACKAGES);
+  console.debug(packages);
   const chartCommonProps = useChartCommonProps({
     leftAxisLegend: "Počet členů",
   });
