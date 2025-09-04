@@ -22,7 +22,6 @@ def extract_member_packages():
 
             for package in dot_path(member, "_embedded.memberPackages"):
                 package_name = dot_path(package, "_embedded.package.name")
-                package_name = normalize_package_name(package_name)
                 package_id = dot_path(package, "_embedded.package.id")
 
                 date_start = package["fromDate"]
